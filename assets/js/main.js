@@ -11,6 +11,7 @@
   const gsap = window.gsap;
   const ScrollTrigger = window.ScrollTrigger;
   const canAnimate = Boolean(gsap && ScrollTrigger) && !reduced;
+  let lenis = null; // rolagem suave; criada mais abaixo, só quando há animação
   if (gsap && ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
 
   /* ---------- revelar ao entrar na tela ---------- */
@@ -104,6 +105,7 @@
       menuBtn.setAttribute('aria-expanded', 'true');
       prevOverflow = root.style.overflow;
       root.style.overflow = 'hidden';
+      if (lenis) lenis.stop();
       if (canAnimate) {
         if (closeTl) closeTl.kill();
         // entrada: cortina, painel logo atrás, itens a 15% da duração do painel
@@ -122,6 +124,7 @@
       menu.classList.remove('is-open');
       menuBtn.setAttribute('aria-expanded', 'false');
       root.style.overflow = prevOverflow;
+      if (lenis) lenis.start();
       if (canAnimate) {
         if (openTl) openTl.kill();
         // saída própria (não é reverse): o painel sai no primeiro frame
@@ -378,13 +381,34 @@
   ScrollTrigger.config({ ignoreMobileResize: true });
   const mm = gsap.matchMedia();
 
+  // Rolagem suave (Lenis): dá peso e inércia à roda do mouse e ao trackpad. No toque fica a
+  // inércia nativa do celular; ali a suavidade vem do "scrub" com atraso nas animações abaixo.
+  if (window.Lenis) {
+    lenis = new window.Lenis({ duration: 1.15, smoothWheel: true });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => lenis.raf(time * 1000));
+    gsap.ticker.lagSmoothing(0);
+    // âncoras (#services, #book...) passam pela mesma rolagem suave
+    d.addEventListener('click', (event) => {
+      const link = event.target.closest('a[href^="#"]');
+      if (!link || event.defaultPrevented) return;
+      const target = link.getAttribute('href').length > 1 ? $(link.getAttribute('href')) : null;
+      if (!target) return;
+      event.preventDefault();
+      lenis.scrollTo(target, { offset: -($('.fcd-header').offsetHeight + 16) });
+      history.pushState(null, '', link.getAttribute('href'));
+    });
+  }
+  // quanto (em segundos) a animação leva para alcançar a rolagem: é o que tira o aspecto "seco"
+  const SCRUB = 0.9;
+
   // hero: a foto assenta devagar enquanto a página rola (parallax curto, só desktop)
   mm.add('(min-width: 761px)', () => {
     const media = $('.fcd-hero__media');
     if (!media) return;
     gsap.fromTo(media, { scale: 1.1, yPercent: -3 }, {
       yPercent: 5, ease: 'none',
-      scrollTrigger: { trigger: '.fcd-hero', start: 'top top', end: 'bottom top', scrub: true },
+      scrollTrigger: { trigger: '.fcd-hero', start: 'top top', end: 'bottom top', scrub: SCRUB },
     });
   });
 
@@ -438,7 +462,7 @@
         x: () => -distance(), ease: 'none',
         scrollTrigger: {
           trigger: pinEl, start: () => `top ${headerH()}px`, end: () => `+=${distance()}`,
-          pin: true, scrub: true, anticipatePin: 1, invalidateOnRefresh: true,
+          pin: true, scrub: SCRUB, anticipatePin: 1, invalidateOnRefresh: true,
           onToggle: (self) => { if (callbarEl && hideBar) callbarEl.classList.toggle('is-away', self.isActive); },
           onUpdate: (self) => {
             gsap.set(fill, { scaleX: self.progress });
@@ -452,7 +476,9 @@
         const st = tween.scrollTrigger;
         if (!card || !st || !distance()) return;
         const ratio = Math.min(card.offsetLeft / distance(), 1);
-        window.scrollTo({ top: st.start + ratio * (st.end - st.start) });
+        const y = st.start + ratio * (st.end - st.start);
+        if (lenis) lenis.scrollTo(y, { immediate: true });
+        else window.scrollTo({ top: y });
       };
       track.addEventListener('focusin', onFocus);
       return () => {
@@ -493,7 +519,7 @@
         scrollTrigger: {
           trigger: '.fcd-manifesto', start: 'top top',
           end: context.conditions.desktop ? '+=80%' : '+=60%',
-          pin: true, scrub: true, invalidateOnRefresh: true,
+          pin: true, scrub: SCRUB, invalidateOnRefresh: true,
         },
       });
     });
@@ -513,7 +539,7 @@
           scrollTrigger: {
             trigger: layer, start: () => `top ${topOf(layer)}px`,
             endTrigger: last, end: () => `top ${topOf(last)}px`,
-            scrub: true, invalidateOnRefresh: true,
+            scrub: 0.5, invalidateOnRefresh: true,
           },
         });
       });

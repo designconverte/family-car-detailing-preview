@@ -2,6 +2,8 @@
    Só tokens de tokens.css; sem sombras, sem raio, sem cor nova. */
 
 html { scroll-padding-top: calc(var(--header-h) + 16px); }
+html.lenis { scroll-behavior: auto; } /* com Lenis ativo, quem suaviza é ele */
+.lenis.lenis-stopped { overflow: hidden; }
 body { overflow-x: clip; }
 img { height: auto; }
 [hidden] { display: none !important; }
