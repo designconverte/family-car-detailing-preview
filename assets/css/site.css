@@ -114,6 +114,10 @@ img { height: auto; }
 /* ---------- antes e depois ---------- */
 .fcd-gallery { display: grid; gap: 32px 64px; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); align-items: end; }
 .fcd-ba__img { width: 100%; height: 100%; object-fit: cover; }
+.fcd-ba-aside { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+.fcd-ba-aside .fcd-list { font-size: 16px; }
+.fcd-ba-aside__price { display: flex; flex-direction: column; gap: 8px; padding-top: 4px; }
+.fcd-ba-aside .fcd-package__price { font-size: clamp(32px, 3.4vw, 44px); }
 .fcd-ba--square { aspect-ratio: 5 / 4; }
 .fcd-ba--square .fcd-ba__img { object-position: 50% 58%; }
 .fcd-ba__handle { will-change: left; }
