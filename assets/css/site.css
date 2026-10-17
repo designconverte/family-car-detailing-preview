@@ -138,9 +138,7 @@ img { height: auto; }
 .fcd-pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 32px; margin-top: clamp(48px, 6vw, 88px); border-top: 3px solid var(--text); }
 .fcd-pillars > div { display: flex; flex-direction: column; gap: 12px; padding-top: 24px; }
 .fcd-pillars p { font-size: 16px; color: var(--text-2); }
-.fcd-why__photo { margin-top: clamp(48px, 6vw, 88px); }
-.fcd-why__photo img { width: 100%; aspect-ratio: 21 / 9; object-fit: cover; object-position: 50% 62%; --fcd-cut: 16px; clip-path: var(--cut); }
-@media (max-width: 860px) { .fcd-why { grid-template-columns: 1fr; } .fcd-why__photo img { aspect-ratio: 4 / 3; } }
+@media (max-width: 860px) { .fcd-why { grid-template-columns: 1fr; } }
 
 /* ---------- processo: três camadas (bloco CARDS-001) ---------- */
 .fcd-deck { --stack-top: calc(var(--header-h) + 24px); --stack-offset: 18px; }
