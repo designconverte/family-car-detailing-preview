@@ -147,6 +147,10 @@ img { height: auto; }
 .fcd-layer__title { font-size: clamp(36px, 4.6vw, 68px); line-height: .92; }
 .fcd-layer__media { position: relative; min-height: 240px; overflow: hidden; }
 .fcd-layer__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* duas fotos no mesmo cartão: lado a lado (retratos) ou empilhadas (paisagens, no desktop) */
+.fcd-layer__media--duo { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--bg); }
+.fcd-layer__media--duo img { position: relative; inset: auto; min-height: 0; }
+@media (min-width: 861px) { .fcd-layer__media--stack { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; } .fcd-layer__media--duo { position: relative; } .fcd-layer__media--duo img { position: absolute; } .fcd-layer__media--duo > img:nth-child(1) { inset: 0 50% 0 0; width: calc(50% - 1px); } .fcd-layer__media--duo > img:nth-child(2) { inset: 0 0 0 50%; left: calc(50% + 1px); width: calc(50% - 1px); } .fcd-layer__media--stack > img:nth-child(1) { inset: 0; width: 100%; height: calc(50% - 1px); } .fcd-layer__media--stack > img:nth-child(2) { inset: auto 0 0 0; left: 0; width: 100%; top: calc(50% + 1px); height: calc(50% - 1px); } }
 .fcd-deck__end { height: 10vh; }
 @media (max-width: 860px) {
   .fcd-deck { --stack-offset: 10px; --stack-top: calc(var(--header-h) + 12px); }
