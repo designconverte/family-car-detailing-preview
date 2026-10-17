@@ -167,20 +167,19 @@
       <p class="fcd-lead">Daily drivers, photographed by us before and after the work. Drag the handle to compare.</p>
     </div>
 
-    <!-- IMAGENS DE AMOSTRA: trocar pelas fotos reais do cliente (mesmo ângulo, luz e enquadramento)
-         e remover a etiqueta "Sample image". Repetir o bloco .fcd-ba para cada carro. -->
+    <!-- Fotos reais do cliente (projeto/imagens/antes.png e depois.png): mesmo ângulo e enquadramento.
+         Para mais carros, repetir o bloco .fcd-ba. -->
     <div class="fcd-gallery">
-      <div class="fcd-ba" data-reveal="wipe">
-        <img class="fcd-ba__img" src="assets/img/car-front-before-1000.webp" srcset="assets/img/car-front-before-700.webp 700w, assets/img/car-front-before-1000.webp 1000w" sizes="(max-width: 860px) 100vw, 60vw" width="1000" height="660" alt="Sample: front of a black sedan with dull, hazy paint before detailing" loading="lazy" decoding="async">
-        <img class="fcd-ba__img fcd-ba__img--after" src="assets/img/car-front-1000.webp" srcset="assets/img/car-front-700.webp 700w, assets/img/car-front-1000.webp 1000w" sizes="(max-width: 860px) 100vw, 60vw" width="1000" height="660" alt="Sample: the same black sedan with deep, glossy paint after detailing" loading="lazy" decoding="async">
+      <div class="fcd-ba fcd-ba--square" data-reveal="wipe">
+        <img class="fcd-ba__img" src="assets/img/ba-seat-before-1051.webp" srcset="assets/img/ba-seat-before-700.webp 700w, assets/img/ba-seat-before-1051.webp 1051w" sizes="(max-width: 860px) 100vw, 60vw" width="1051" height="988" alt="Before: a fabric driver's seat and center console covered in dust, crumbs and stains" loading="lazy" decoding="async">
+        <img class="fcd-ba__img fcd-ba__img--after" src="assets/img/ba-seat-after-1051.webp" srcset="assets/img/ba-seat-after-700.webp 700w, assets/img/ba-seat-after-1051.webp 1051w" sizes="(max-width: 860px) 100vw, 60vw" width="1051" height="988" alt="After: the same seat and console clean, with the fabric pattern visible again" loading="lazy" decoding="async">
         <span class="fcd-tag fcd-tag--outline fcd-ba__label fcd-ba__label--before" style="background:var(--fcd-black)">Before</span>
         <span class="fcd-tag fcd-ba__label fcd-ba__label--after">After</span>
-        <span class="fcd-tag fcd-tag--outline fcd-ba__sample">Sample image</span>
         <div class="fcd-ba__handle"></div>
         <input class="fcd-ba__range" type="range" min="0" max="100" value="50" aria-label="Before and after comparison. Move the slider to reveal more of each photo.">
       </div>
       <div class="fcd-stack" data-reveal="rise">
-        <dl class="fcd-spec"><div><dt>Vehicle</dt><dd><span data-tbd="vehicle">[YEAR MAKE MODEL]</span></dd></div><div><dt>Service</dt><dd><span data-tbd="service">[SERVICE]</span></dd></div><div><dt>Time</dt><dd><span data-tbd="time">[TIME]</span></dd></div></dl>
+        <dl class="fcd-spec"><div><dt>Vehicle</dt><dd><span data-tbd="vehicle">[YEAR MAKE MODEL]</span></dd></div><div><dt>Service</dt><dd>Full detail · seats and console</dd></div><div><dt>Time</dt><dd><span data-tbd="time">[TIME]</span></dd></div></dl>
         <a class="fcd-link" href="#book" style="align-self:flex-start">Book this result<svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
       </div>
     </div>
