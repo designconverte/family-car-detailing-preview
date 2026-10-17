@@ -17,6 +17,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/img/simbolo.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/archivo-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/video/hero-poster-1280.webp" as="image" type="image/webp" fetchpriority="high">
 <link rel="stylesheet" href="assets/css/tokens.css">
 <link rel="stylesheet" href="assets/css/components.css">
 <link rel="stylesheet" href="assets/css/site.css">
@@ -101,7 +102,12 @@
 
 <!-- ============================ HERO ============================ -->
 <section class="fcd-hero" data-reveal="lines">
-  <img class="fcd-hero__media" src="assets/img/studio-1400.webp" srcset="assets/img/studio-800.webp 800w, assets/img/studio-1400.webp 1400w, assets/img/studio-2000.webp 2000w" sizes="100vw" width="2000" height="1500" alt="Family Car Detailing studio at night, with a wet black car in the foreground" fetchpriority="high" decoding="async">
+  <!-- Vídeo em loop do estúdio (gerado por tools/build-hero-video.py). Sem JS, com movimento reduzido
+       ou com economia de dados fica só o pôster; o JS escolhe o arquivo pelo tamanho da tela. -->
+  <video class="fcd-hero__media" data-hero-video muted loop playsinline preload="none" poster="assets/video/hero-poster-1280.webp" width="1280" height="720" aria-hidden="true"
+    data-src-wide="assets/video/hero-1280.webm|video/webm,assets/video/hero-1280.mp4|video/mp4"
+    data-src-narrow="assets/video/hero-768.mp4|video/mp4,assets/video/hero-768.webm|video/webm"></video>
+  <button class="fcd-hero__toggle" type="button" data-hero-toggle aria-pressed="false" aria-label="Pause background video" hidden><svg aria-hidden="true" data-icon="pause" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg><svg aria-hidden="true" data-icon="play" viewBox="0 0 24 24" fill="currentColor" hidden><path d="M7 5l12 7-12 7z"/></svg></button>
   <span class="fcd-eyebrow">Family-run detailing studio · Waltham, MA</span>
   <h1 class="fcd-display fcd-hero__title"><span class="fcd-line"><span>The family car,</span></span><span class="fcd-line"><span>back <span class="fcd-hl">like new.</span></span></span></h1>
   <div class="fcd-bar fcd-bar--lg"></div>

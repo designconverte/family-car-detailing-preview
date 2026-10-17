@@ -75,6 +75,52 @@
     update();
   }
 
+  /* ---------- vídeo do hero: só toca quando faz sentido ---------- */
+  const heroVideo = $('[data-hero-video]');
+  const heroToggle = $('[data-hero-toggle]');
+  const saveData = Boolean(navigator.connection && navigator.connection.saveData);
+  if (heroVideo && !reduced && !saveData) {
+    const list = window.matchMedia('(max-width: 760px)').matches ? heroVideo.dataset.srcNarrow : heroVideo.dataset.srcWide;
+    list.split(',').forEach((entry) => {
+      const [src, type] = entry.split('|');
+      const source = d.createElement('source');
+      source.src = src;
+      source.type = type;
+      heroVideo.appendChild(source);
+    });
+    let userPaused = false;
+    const setToggle = (playing) => {
+      if (!heroToggle) return;
+      heroToggle.setAttribute('aria-pressed', String(!playing));
+      heroToggle.setAttribute('aria-label', playing ? 'Pause background video' : 'Play background video');
+      $('[data-icon="pause"]', heroToggle).hidden = !playing;
+      $('[data-icon="play"]', heroToggle).hidden = playing;
+    };
+    const play = () => {
+      const attempt = heroVideo.play();
+      if (attempt && attempt.catch) attempt.catch(() => setToggle(false)); // autoplay bloqueado: fica o pôster
+    };
+    heroVideo.addEventListener('playing', () => { if (heroToggle) heroToggle.hidden = false; setToggle(true); });
+    heroVideo.addEventListener('pause', () => setToggle(false));
+    heroVideo.load();
+    // fora da tela o vídeo para (economiza bateria e processamento)
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting && !userPaused) play();
+        else if (!entry.isIntersecting) heroVideo.pause();
+      }, { threshold: 0.1 }).observe(heroVideo);
+    } else {
+      play();
+    }
+    if (heroToggle) {
+      heroToggle.addEventListener('click', () => {
+        userPaused = !heroVideo.paused;
+        if (userPaused) heroVideo.pause();
+        else play();
+      });
+    }
+  }
+
   /* ---------- menu overlay (NAV-001) ---------- */
   const menu = $('#menu');
   const menuBtn = $('.fcd-menu-btn');
@@ -406,8 +452,9 @@
   mm.add('(min-width: 761px)', () => {
     const media = $('.fcd-hero__media');
     if (!media) return;
-    gsap.fromTo(media, { scale: 1.1, yPercent: -3 }, {
-      yPercent: 5, ease: 'none',
+    // o vídeo vem de 832 px: pouca ampliação extra para não amolecer ainda mais
+    gsap.fromTo(media, { scale: 1.05, yPercent: -2 }, {
+      yPercent: 2, ease: 'none',
       scrollTrigger: { trigger: '.fcd-hero', start: 'top top', end: 'bottom top', scrub: SCRUB },
     });
   });

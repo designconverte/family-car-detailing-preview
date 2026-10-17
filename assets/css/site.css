@@ -26,12 +26,16 @@ img { height: auto; }
 
 /* ---------- hero ---------- */
 .fcd-hero { min-height: min(860px, calc(100svh - var(--header-h))); }
-.fcd-hero__media { width: 100%; height: 100%; object-fit: cover; object-position: 70% 60%; }
+.fcd-hero__media { width: 100%; height: 100%; object-fit: cover; object-position: 62% 50%; background: var(--fcd-black); }
+.fcd-hero__toggle { position: absolute; top: 24px; right: var(--gutter); z-index: 2; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 0; background: rgba(13, 11, 12, .55); color: var(--fcd-white); box-shadow: inset 0 0 0 1px rgba(246, 251, 255, .35); cursor: pointer; transition: box-shadow var(--fcd-dur-1) var(--fcd-ease), color var(--fcd-dur-1) var(--fcd-ease); }
+.fcd-hero__toggle:hover { color: var(--fcd-yellow); box-shadow: inset 0 0 0 1px var(--fcd-yellow); }
+.fcd-hero__toggle svg { width: 16px; height: 16px; }
 .fcd-hero__title { max-width: none; font-size: clamp(40px, 6.4vw, 100px); }
 .fcd-hero__call { background: none; }
 .fcd-hero__call svg { transform: none !important; }
 @media (max-width: 760px) {
-  .fcd-hero__media { object-position: 30% 35%; }
+  .fcd-hero__media { object-position: 50% 50%; }
+  .fcd-hero__toggle { top: 16px; right: 16px; }
   .fcd-hero__facts { grid-template-columns: 1fr 1fr; }
 }
 
