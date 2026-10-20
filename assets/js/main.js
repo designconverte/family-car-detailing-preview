@@ -80,7 +80,10 @@
   const heroToggle = $('[data-hero-toggle]');
   const saveData = Boolean(navigator.connection && navigator.connection.saveData);
   if (heroVideo && !reduced && !saveData) {
-    const list = window.matchMedia('(max-width: 760px)').matches ? heroVideo.dataset.srcNarrow : heroVideo.dataset.srcWide;
+    const narrow = window.matchMedia('(max-width: 760px)').matches;
+    const list = narrow ? heroVideo.dataset.srcNarrow : heroVideo.dataset.srcWide;
+    // no celular a edição é outra (quadrada): o pôster acompanha, para não pular de imagem ao tocar
+    if (narrow && heroVideo.dataset.posterNarrow) heroVideo.poster = heroVideo.dataset.posterNarrow;
     list.split(',').forEach((entry) => {
       const [src, type] = entry.split('|');
       const source = d.createElement('source');
