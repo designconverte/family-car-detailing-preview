@@ -198,6 +198,49 @@
     window.matchMedia('(min-width: 961px)').addEventListener('change', (mq) => { if (mq.matches) close(false); });
   }
 
+  /* ---------- detalhes dos serviços: <dialog> nativo (Esc, foco e fundo inerte vêm do navegador) ---------- */
+  const modalRoot = d.documentElement;
+  let modalOpener = null;
+  let modalLeaving = false; // fechou por um link que leva a outra seção: não devolver o foco ao cartão
+  let modalPrevOverflow = '';
+  const releaseModal = () => {
+    modalRoot.style.overflow = modalPrevOverflow;
+    if (lenis) lenis.start();
+  };
+  const closeModal = (dialog) => {
+    if (!dialog.open) return;
+    releaseModal(); // antes do close: o link "Book now" do modal precisa da rolagem destravada
+    dialog.close();
+  };
+  $$('dialog.fcd-modal').forEach((dialog) => {
+    dialog.addEventListener('close', () => {
+      releaseModal();
+      // devolver o foco ao cartão dispararia o foco do trilho e puxaria a página de volta aos serviços
+      if (modalOpener && !modalLeaving) modalOpener.focus({ preventScroll: true });
+      modalOpener = null;
+      modalLeaving = false;
+    });
+    // clique no fundo escuro fecha
+    dialog.addEventListener('click', (event) => { if (event.target === dialog) closeModal(dialog); });
+    $$('[data-modal-close]', dialog).forEach((el) => el.addEventListener('click', () => {
+      modalLeaving = el.tagName === 'A';
+      closeModal(dialog);
+    }));
+  });
+  $$('[data-modal-open]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const dialog = d.getElementById(btn.dataset.modalOpen);
+      if (!dialog || typeof dialog.showModal !== 'function') return;
+      modalOpener = btn;
+      modalPrevOverflow = modalRoot.style.overflow;
+      modalRoot.style.overflow = 'hidden';
+      if (lenis) lenis.stop();
+      dialog.showModal();
+      const box = $('.fcd-modal__box', dialog);
+      if (box) box.scrollTop = 0;
+    });
+  });
+
   /* ---------- borda de luz (EFFECT-001): duas variáveis, 1 escrita por frame ---------- */
   if (window.matchMedia('(hover: hover) and (pointer: fine)').matches && !reduced) {
     $$('[data-glow]').forEach((card) => {

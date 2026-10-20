@@ -111,6 +111,45 @@ img { height: auto; }
 }
 @media (max-width: 620px) { .fcd-rail.is-rail .fcd-svc { flex-basis: calc(100vw - 2 * var(--gutter) - 26px); } }
 
+/* ---------- detalhes do serviço: botão no cartão + modal ---------- */
+.fcd-svc__actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; margin-top: auto; }
+.fcd-svc .fcd-svc__actions .fcd-link { margin-top: 0; }
+.fcd-svc__more { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0; border: 0; background: none; color: var(--text-2); cursor: pointer; font: 500 12px/1 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; transition: color var(--fcd-dur-1) var(--fcd-ease); }
+.fcd-svc__more svg { width: 14px; height: 14px; transition: transform var(--fcd-dur-2) var(--fcd-ease); }
+.fcd-svc__more:hover { color: var(--fcd-yellow); }
+.fcd-svc__more:hover svg { transform: rotate(90deg); }
+html:not(.js) [data-modal-open] { display: none; }
+
+.fcd-modal { width: min(760px, calc(100vw - 32px)); max-width: none; max-height: calc(100svh - 48px); padding: 0; border: 0; background: transparent; color: var(--text); overflow: visible; }
+.fcd-modal::backdrop { background: rgba(13, 11, 12, .8); backdrop-filter: blur(4px); }
+.fcd-modal__box { display: flex; flex-direction: column; gap: 22px; max-height: calc(100svh - 48px); overflow-y: auto; overscroll-behavior: contain; padding: clamp(24px, 4vw, 48px); background: var(--fcd-graphite); box-shadow: inset 0 0 0 1px var(--fcd-steel), inset 0 6px 0 var(--fcd-yellow); scrollbar-width: thin; scrollbar-color: var(--fcd-silver) var(--fcd-graphite); }
+.fcd-modal__box:focus-visible { outline: none; }
+.fcd-modal__head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.fcd-modal__close { display: inline-flex; align-items: center; justify-content: center; flex: none; width: 44px; height: 44px; padding: 0; border: 0; background: none; color: var(--text); cursor: pointer; box-shadow: inset 0 0 0 1px var(--control-border); }
+.fcd-modal__close:hover { box-shadow: inset 0 0 0 1px var(--fcd-yellow); color: var(--fcd-yellow); }
+.fcd-modal__close svg { width: 18px; height: 18px; transform: rotate(45deg); }
+.fcd-modal__title { font-size: clamp(26px, 3vw, 40px); line-height: 1; }
+.fcd-modal__part { display: flex; flex-direction: column; gap: 14px; padding-top: 22px; border-top: 1px solid var(--border); }
+.fcd-modal__part p { font-size: 16px; color: var(--text-2); max-width: 64ch; }
+.fcd-modal__part h3 { font-size: 20px; line-height: 1.15; }
+.fcd-modal .fcd-list { font-size: 15px; }
+.fcd-modal .fcd-spec dd { text-align: right; }
+.fcd-modal__note { font-size: 14px; color: var(--muted); }
+.fcd-modal__foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px; padding-top: 22px; border-top: 3px solid var(--text); }
+.fcd-modal__foot .fcd-package__price { font-size: clamp(28px, 3vw, 38px); }
+@media (max-width: 620px) {
+  /* no celular vira painel de baixo para cima */
+  .fcd-modal { width: 100vw; max-height: 90svh; margin: auto 0 0; }
+  .fcd-modal__box { max-height: 90svh; padding: 22px 20px calc(24px + env(safe-area-inset-bottom)); }
+  .fcd-modal__foot .fcd-btn { flex: 1 1 100%; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .fcd-modal[open] .fcd-modal__box { animation: fcd-modal-in var(--fcd-dur-3) var(--fcd-ease); }
+  .fcd-modal[open]::backdrop { animation: fcd-fade-in var(--fcd-dur-2) linear; }
+  @keyframes fcd-modal-in { from { opacity: 0; transform: translateY(28px); } }
+  @keyframes fcd-fade-in { from { opacity: 0; } }
+}
+
 /* ---------- antes e depois ---------- */
 .fcd-gallery { display: grid; gap: 32px 64px; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); align-items: end; }
 .fcd-ba__img { width: 100%; height: 100%; object-fit: cover; }
