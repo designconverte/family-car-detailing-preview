@@ -75,51 +75,84 @@
     update();
   }
 
-  /* ---------- vídeo do hero: só toca quando faz sentido ---------- */
+  /* ---------- vídeo do hero ----------
+     Toca sozinho quando o navegador deixa. O iPhone em Modo de Pouca Energia bloqueia vídeo automático
+     mesmo sem som: aí o botão de play aparece e o primeiro toque na página já inicia o vídeo.
+     Com "reduzir movimento" (ou economia de dados) não toca sozinho, mas o botão deixa a pessoa escolher. */
   const heroVideo = $('[data-hero-video]');
   const heroToggle = $('[data-hero-toggle]');
   const saveData = Boolean(navigator.connection && navigator.connection.saveData);
-  if (heroVideo && !reduced && !saveData) {
+  if (heroVideo) {
     const narrow = window.matchMedia('(max-width: 760px)').matches;
-    const list = narrow ? heroVideo.dataset.srcNarrow : heroVideo.dataset.srcWide;
     // no celular a edição é outra (quadrada): o pôster acompanha, para não pular de imagem ao tocar
     if (narrow && heroVideo.dataset.posterNarrow) heroVideo.poster = heroVideo.dataset.posterNarrow;
-    list.split(',').forEach((entry) => {
-      const [src, type] = entry.split('|');
-      const source = d.createElement('source');
-      source.src = src;
-      source.type = type;
-      heroVideo.appendChild(source);
-    });
-    let userPaused = false;
+    // iOS só toca sozinho com som desligado e inline; as propriedades garantem além dos atributos
+    heroVideo.muted = true;
+    heroVideo.defaultMuted = true;
+    heroVideo.playsInline = true;
+    heroVideo.setAttribute('webkit-playsinline', '');
+    const autoplay = !reduced && !saveData;
+    let loaded = false;
+    let userPaused = !autoplay;
+    let inView = true;
+    const loadSources = () => {
+      if (loaded) return;
+      loaded = true;
+      const list = narrow ? heroVideo.dataset.srcNarrow : heroVideo.dataset.srcWide;
+      list.split(',').forEach((entry) => {
+        const [src, type] = entry.split('|');
+        const source = d.createElement('source');
+        source.src = src;
+        source.type = type;
+        heroVideo.appendChild(source);
+      });
+      heroVideo.load();
+    };
     const setToggle = (playing) => {
       if (!heroToggle) return;
+      heroToggle.hidden = false;
       heroToggle.setAttribute('aria-pressed', String(!playing));
       heroToggle.setAttribute('aria-label', playing ? 'Pause background video' : 'Play background video');
       $('[data-icon="pause"]', heroToggle).hidden = !playing;
       $('[data-icon="play"]', heroToggle).hidden = playing;
     };
-    const play = () => {
-      const attempt = heroVideo.play();
-      if (attempt && attempt.catch) attempt.catch(() => setToggle(false)); // autoplay bloqueado: fica o pôster
+    const retryOnGesture = () => {
+      // bloqueado pelo sistema: tenta de novo no primeiro toque/clique/tecla (contam como gesto do usuário)
+      const retry = (event) => {
+        if (heroToggle && heroToggle.contains(event.target)) return; // o próprio botão já trata
+        ['touchend', 'click', 'keydown'].forEach((type) => d.removeEventListener(type, retry, true));
+        if (!userPaused && inView) play();
+      };
+      ['touchend', 'click', 'keydown'].forEach((type) => d.addEventListener(type, retry, { capture: true, passive: true }));
     };
-    heroVideo.addEventListener('playing', () => { if (heroToggle) heroToggle.hidden = false; setToggle(true); });
+    const play = () => {
+      loadSources();
+      const attempt = heroVideo.play();
+      if (attempt && attempt.catch) {
+        attempt.catch(() => {
+          setToggle(false);
+          if (!userPaused) retryOnGesture();
+        });
+      }
+    };
+    heroVideo.addEventListener('playing', () => setToggle(true));
     heroVideo.addEventListener('pause', () => setToggle(false));
-    heroVideo.load();
+    if (!autoplay) setToggle(false); // só o botão de play, sem baixar o vídeo
+    if (autoplay) loadSources();
     // fora da tela o vídeo para (economiza bateria e processamento)
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(([entry]) => {
-        if (entry.isIntersecting && !userPaused) play();
-        else if (!entry.isIntersecting) heroVideo.pause();
+        inView = entry.isIntersecting;
+        if (inView && !userPaused) play();
+        else if (!inView && !heroVideo.paused) heroVideo.pause();
       }, { threshold: 0.1 }).observe(heroVideo);
-    } else {
+    } else if (autoplay) {
       play();
     }
     if (heroToggle) {
       heroToggle.addEventListener('click', () => {
-        userPaused = !heroVideo.paused;
-        if (userPaused) heroVideo.pause();
-        else play();
+        if (heroVideo.paused) { userPaused = false; play(); }
+        else { userPaused = true; heroVideo.pause(); }
       });
     }
   }
