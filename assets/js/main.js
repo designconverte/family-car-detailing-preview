@@ -387,7 +387,7 @@
       const needsQuote = addons.some((el) => 'quote' in el.dataset);
       setSum('vehicle', vehicle.value, 'Pick a vehicle');
       setSum('addons', addons.map((el) => el.value).join(', '), 'None');
-      setSum('price', `${'from' in vehicle.dataset ? 'From ' : ''}$${total}${needsQuote ? ' + polish quote' : ''}`, '');
+      setSum('price', `$${total}${needsQuote ? ' + polish quote' : ''}`, '');
     };
 
     bookForm.addEventListener('change', (event) => {
@@ -407,6 +407,21 @@
     });
     refresh();
   }
+
+  /* ---------- origem do lead: guardada no primeiro acesso da sessão, vai junto com o formulário ---------- */
+  const TRACK_KEY = 'fcd-origin';
+  const readOrigin = () => {
+    try { return JSON.parse(sessionStorage.getItem(TRACK_KEY) || 'null'); } catch (error) { return null; }
+  };
+  if (!readOrigin()) {
+    const params = new URLSearchParams(location.search);
+    const origin = { landing: location.pathname + location.search, referrer: d.referrer || '' };
+    ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'gclid', 'fbclid'].forEach((key) => {
+      if (params.get(key)) origin[key] = params.get(key).slice(0, 200);
+    });
+    try { sessionStorage.setItem(TRACK_KEY, JSON.stringify(origin)); } catch (error) { /* modo privado: segue sem */ }
+  }
+  const metaContent = (name) => { const el = d.querySelector(`meta[name="${name}"]`); return el ? el.content.trim() : ''; };
 
   /* ---------- formulários: validar ao sair do campo, erro ao lado, envio honesto ---------- */
   const phoneOk = (value) => {
@@ -474,7 +489,7 @@
       }
       if (invalid.length) { invalid[0].focus(); return; }
 
-      const endpoint = form.dataset.endpoint;
+      const endpoint = metaContent('fcd-form-endpoint');
       if (!endpoint) {
         say(form, 'note', 'Preview mode: this request was not sent. Connect the form endpoint before launch.');
         return;
@@ -483,13 +498,34 @@
       const button = $('button[type="submit"]', form);
       button.disabled = true;
       try {
+        const payload = {
+          token: metaContent('fcd-form-key'),
+          form: form.dataset.form,
+          ...data,
+          sms: data.sms === 'on' ? 'yes' : (form.dataset.form === 'quote' ? 'no' : ''),
+          origin: readOrigin() || {},
+          device: window.matchMedia('(max-width: 760px)').matches ? 'mobile' : 'desktop',
+        };
+        // text/plain evita a pré-verificação de CORS, que o Apps Script não responde; o corpo segue em JSON
         const response = await fetch(endpoint, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({ form: form.dataset.form, ...data }),
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload),
         });
         if (!response.ok) throw new Error(`Request failed with status ${response.status}`);
+        const result = await response.json().catch(() => ({ ok: false, error: 'invalid response' }));
+        if (!result.ok) throw new Error(`Endpoint refused the lead: ${result.error || 'unknown'}`);
         form.reset();
+        if (form.dataset.form === 'booking') {
+          // o reset não limpa o que o JS controla: dia escolhido, resumo e estimativa
+          chosenDay = null;
+          $$('.fcd-day', form).forEach((b, i) => { b.setAttribute('aria-checked', 'false'); b.tabIndex = i === 0 ? 0 : -1; });
+          setSum('day', '', 'Pick a day');
+          setSum('window', '', 'Pick a time');
+          setSum('where', '42 Felton St, Waltham', '');
+          const vehicle = $('input[name="vehicle"]:checked', form);
+          if (vehicle) vehicle.dispatchEvent(new Event('change', { bubbles: true })); // recalcula a estimativa
+        }
         say(form, 'success', 'Thanks. We have your request and will reply with your price and time.');
       } catch (error) {
         console.error('Failed to send form', { form: form.dataset.form, error });
