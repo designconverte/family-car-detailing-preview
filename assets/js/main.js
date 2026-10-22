@@ -491,7 +491,8 @@
       }
       if (invalid.length) { invalid[0].focus(); return; }
 
-      const endpoint = metaContent('fcd-form-endpoint');
+      // na prévia do GitHub Pages nada é enviado: os testes de lá não podem virar lead real na planilha
+      const endpoint = location.hostname.endsWith('github.io') ? '' : metaContent('fcd-form-endpoint');
       if (!endpoint) {
         say(form, 'note', 'Preview mode: this request was not sent. Connect the form endpoint before launch.');
         return;

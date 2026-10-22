@@ -10,7 +10,7 @@
 <!-- Formulários → Apps Script (planilha + e-mail). Colar a URL /exec da implantação em fcd-form-endpoint.
      A chave abaixo é pública (fica na página) e precisa ser igual a SITE_KEY no script: só filtra envio
      automático. Nunca colocar senha aqui: este arquivo vai para o repositório público. -->
-<meta name="fcd-form-endpoint" content="">
+<meta name="fcd-form-endpoint" content="https://script.google.com/macros/s/AKfycby9XRKz1qFYpH7yUVpo8mVvvDIdRCtBJ1PCuYYuA8ddHEqKHGYRgpXSl7MUYKOGR7zAxg/exec">
 <meta name="fcd-form-key" content="80ab7014f73c6baf3291bd03d2dd8c9d989d4d47e20a391e">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
@@ -30,7 +30,7 @@
 <!-- Prévia no GitHub Pages não deve ser indexada pelo Google; no domínio final este trecho não faz nada. -->
 <script>if (location.hostname.endsWith('github.io')) { var m = document.createElement('meta'); m.name = 'robots'; m.content = 'noindex, nofollow'; document.head.appendChild(m); }</script>
 
-<!-- Dados estruturados. Horário (openingHoursSpecification) entra quando o cliente confirmar.
+<!-- Dados estruturados. Horário: todos os dias, 9h às 18h (confirmado em 2026-10-22).
      Nome, endereço e telefone precisam ficar idênticos ao Google Business Profile. -->
 <script type="application/ld+json">
 {
@@ -44,6 +44,7 @@
   "description": "Family-run car detailing studio in Waltham, MA: full detail, engine bay cleaning, headlight restoration and paint polishing.",
   "telephone": "+1-781-290-8518",
   "address": { "@type": "PostalAddress", "streetAddress": "42 Felton Street, Box 7", "addressLocality": "Waltham", "addressRegion": "MA", "postalCode": "02453", "addressCountry": "US" },
+  "openingHoursSpecification": [{ "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], "opens": "09:00", "closes": "18:00" }],
   "areaServed": ["Waltham, MA", "Newton, MA", "Lexington, MA", "Watertown, MA", "Belmont, MA", "Weston, MA", "Lincoln, MA"],
   "makesOffer": [
     { "@type": "Offer", "price": "249", "priceCurrency": "USD", "itemOffered": { "@type": "Service", "name": "Full detail (sedans and SUVs)" } },
@@ -54,7 +55,7 @@
   ]
 }
 </script>
-<!-- FAQPage: só as respostas completas. Incluir a de agendamento quando o horário de funcionamento for informado. -->
+<!-- FAQPage: as mesmas perguntas e respostas do FAQ visível. -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -62,6 +63,7 @@
   "mainEntity": [
     { "@type": "Question", "name": "How much does car detailing cost in Waltham?", "acceptedAnswer": { "@type": "Answer", "text": "A full detail is $249 for sedans and SUVs and $349 for trucks. Engine bay cleaning is $149 and headlight restoration is $139. Paint polishing is quoted after we see the car. We confirm the price with you before we start." } },
     { "@type": "Question", "name": "How long does a full car detail take?", "acceptedAnswer": { "@type": "Answer", "text": "It varies a lot with the size and condition of the car, so we don't list a fixed time. We look the car over when you drop it off and text you as soon as it's ready." } },
+    { "@type": "Question", "name": "Do I need an appointment for car detailing in Waltham?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, booking ahead holds a slot in the studio for your car. You can request a day online or call (781) 290-8518. We're open every day, 9 AM to 6 PM." } },
     { "@type": "Question", "name": "What is included in a full car detail?", "acceptedAnswer": { "@type": "Answer", "text": "A full detail covers the car inside and out. Inside: a complete vacuum, carpets and mats, seats, dashboard and console, doors and interior trim. Outside: a full body wash, wheels and tires, wheel wells, then drying and a final finish." } },
     { "@type": "Question", "name": "How long does the engine bay protection last?", "acceptedAnswer": { "@type": "Answer", "text": "Up to about three months. It depends on how the car is used and maintained and on the product's specifications. The protection is heat-resistant and does not come off easily in normal use." } },
     { "@type": "Question", "name": "Does paint polishing remove all scratches?", "acceptedAnswer": { "@type": "Answer", "text": "No. Polishing reduces or removes light scratches and brings back gloss, but a scratch that goes through the clear coat can't be polished out. We look at the paint with you and agree on the price and the expected result before we start." } },
@@ -383,7 +385,7 @@
     <div>
       <details class="fcd-faq" open><summary>How much does car detailing cost in Waltham?<svg aria-hidden="true"><use href="#i-plus"/></svg></summary><div class="fcd-faq__body">A full detail is $249 for sedans and SUVs and $349 for trucks. Engine bay cleaning is $149 and headlight restoration is $139. Paint polishing is quoted after we see the car. We confirm the price with you before we start.</div></details>
       <details class="fcd-faq"><summary>How long does a full car detail take?<svg aria-hidden="true"><use href="#i-plus"/></svg></summary><div class="fcd-faq__body">It varies a lot with the size and condition of the car, so we don't list a fixed time. We look the car over when you drop it off and text you as soon as it's ready.</div></details>
-      <details class="fcd-faq"><summary>Do I need an appointment for car detailing in Waltham?<svg aria-hidden="true"><use href="#i-plus"/></svg></summary><div class="fcd-faq__body">Yes, booking ahead holds a slot in the studio for your car. You can request a day online or call (781) 290-8518. We're open <span data-tbd="hours">[HOURS]</span>.</div></details>
+      <details class="fcd-faq"><summary>Do I need an appointment for car detailing in Waltham?<svg aria-hidden="true"><use href="#i-plus"/></svg></summary><div class="fcd-faq__body">Yes, booking ahead holds a slot in the studio for your car. You can request a day online or call (781) 290-8518. We're open every day, 9 AM to 6 PM.</div></details>
       <details class="fcd-faq"><summary>What is included in a full car detail?<svg aria-hidden="true"><use href="#i-plus"/></svg></summary><div class="fcd-faq__body">A full detail covers the car inside and out. Inside: a complete vacuum, carpets and mats, seats, dashboard and console, doors and interior trim. Outside: a full body wash, wheels and tires, wheel wells, then drying and a final finish.</div></details>
       <details class="fcd-faq"><summary>How long does the engine bay protection last?<svg aria-hidden="true"><use href="#i-plus"/></svg></summary><div class="fcd-faq__body">Up to about three months. It depends on how the car is used and maintained and on the product's specifications. The protection is heat-resistant and does not come off easily in normal use.</div></details>
       <details class="fcd-faq"><summary>Does paint polishing remove all scratches?<svg aria-hidden="true"><use href="#i-plus"/></svg></summary><div class="fcd-faq__body">No. Polishing reduces or removes light scratches and brings back gloss, but a scratch that goes through the clear coat can't be polished out. We look at the paint with you and agree on the price and the expected result before we start.</div></details>
@@ -416,7 +418,7 @@
         <h2 class="fcd-h1"><span class="fcd-line"><span>Come see</span></span><span class="fcd-line"><span class="fcd-hl">the studio.</span></span></h2>
         <div class="fcd-bar"></div>
         <address class="fcd-body" style="font-style:normal">42 Felton Street, Box 7<br>Waltham, MA 02453<br><a href="tel:+17812908518">(781) 290-8518</a></address>
-        <table class="fcd-hours"><caption class="fcd-sr">Opening hours</caption><tbody><tr><th scope="row">Mon–Fri</th><td><span data-tbd="hours">[HOURS]</span></td></tr><tr><th scope="row">Saturday</th><td><span data-tbd="hours">[HOURS]</span></td></tr><tr><th scope="row">Sunday</th><td><span data-tbd="hours">[HOURS]</span></td></tr></tbody></table>
+        <table class="fcd-hours"><caption class="fcd-sr">Opening hours</caption><tbody><tr><th scope="row">Mon–Sun</th><td>9:00 AM – 6:00 PM</td></tr></tbody></table>
         <!-- Instagram / Facebook / rota: trocar os href pelos links reais do cliente. -->
         <div class="fcd-visit__links"><a class="fcd-btn fcd-btn--secondary" href="https://www.google.com/maps/search/?api=1&amp;query=42+Felton+St+%237%2C+Waltham%2C+MA+02453" target="_blank" rel="noopener">Get directions</a><a class="fcd-link" href="#visit" data-tbd-link="instagram">Instagram<svg aria-hidden="true"><use href="#i-arrow"/></svg></a><a class="fcd-link" href="#visit" data-tbd-link="facebook">Facebook<svg aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
       </div>
@@ -460,7 +462,7 @@
   <div class="fcd-footer__cols">
     <div class="fcd-footer__brand"><img class="fcd-logo" style="width:240px" src="assets/img/logo_hor_light.svg" width="827" height="136" alt="Family Car Detailing" loading="lazy"><span class="fcd-footer__tagline">Cleaner cars. <span class="fcd-hl">Brighter days.</span></span></div>
     <nav aria-label="Services"><span class="fcd-eyebrow" style="color:var(--muted);padding-bottom:10px">Services</span><a href="#services">Full detail</a><a href="#services">Truck detail</a><a href="#services">Engine bay cleaning</a><a href="#services">Headlight restoration</a><a href="#services">Paint polishing</a></nav>
-    <address><span class="fcd-eyebrow" style="color:var(--muted);padding-bottom:10px;min-height:0">Visit</span>42 Felton Street, Box 7<span>Waltham, MA&nbsp;02453</span><a href="tel:+17812908518">(781) 290-8518</a></address>
+    <address><span class="fcd-eyebrow" style="color:var(--muted);padding-bottom:10px;min-height:0">Visit</span>42 Felton Street, Box 7<span>Waltham, MA&nbsp;02453</span><a href="tel:+17812908518">(781) 290-8518</a><span>Open daily, 9 AM – 6 PM</span></address>
     <nav aria-label="Follow"><span class="fcd-eyebrow" style="color:var(--muted);padding-bottom:10px">Follow</span><a href="#visit" data-tbd-link="instagram">Instagram</a><a href="#visit" data-tbd-link="facebook">Facebook</a><a href="blog/">Blog</a><a href="#book">Book now</a></nav>
   </div>
   <div class="fcd-footer__legal"><span>© 2026 Family Car Detailing · Waltham, MA</span><span>familycardetailing.com</span></div>
