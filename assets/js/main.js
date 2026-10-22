@@ -393,7 +393,7 @@
     bookForm.addEventListener('change', (event) => {
       const { name, value } = event.target;
       if (name === 'vehicle' || name === 'addons') refresh();
-      if (name === 'pickup') setSum('where', event.target.checked ? 'Weekend pickup & delivery' : '42 Felton St, Waltham', '');
+      if (name === 'pickup') setSum('where', event.target.checked ? 'Weekend pickup & delivery' : '42 Felton St, Box 7, Waltham', '');
       if (name === 'window') { setSum('window', value, 'Pick a time'); updateHint(); }
     });
 
@@ -524,7 +524,7 @@
           $$('.fcd-day', form).forEach((b, i) => { b.setAttribute('aria-checked', 'false'); b.tabIndex = i === 0 ? 0 : -1; });
           setSum('day', '', 'Pick a day');
           setSum('window', '', 'Pick a time');
-          setSum('where', '42 Felton St, Waltham', '');
+          setSum('where', '42 Felton St, Box 7, Waltham', '');
           const vehicle = $('input[name="vehicle"]:checked', form);
           if (vehicle) vehicle.dispatchEvent(new Event('change', { bubbles: true })); // recalcula a estimativa
         }
