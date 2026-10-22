@@ -32,6 +32,10 @@ img { height: auto; }
 .fcd-hero__toggle svg { width: 16px; height: 16px; }
 .fcd-hero__title { max-width: none; font-size: clamp(40px, 6.4vw, 100px); }
 .fcd-hero__call { background: none; }
+.fcd-svc__wash { font-size: 14px; line-height: 1.45; }
+/* desktop: listas um pouco mais justas para título + cartões continuarem cabendo juntos na tela */
+@media (min-width: 961px) { .fcd-rail.is-rail .fcd-svc .fcd-list li { padding: 7px 0; } .fcd-rail.is-rail .fcd-svc { gap: 14px; } }
+.fcd-hero__note { max-width: 60ch; padding-left: 14px; box-shadow: inset 3px 0 0 var(--fcd-yellow); font-size: 15px; font-weight: 500; line-height: 1.5; color: var(--text); }
 .fcd-hero__call svg { transform: none !important; }
 @media (max-width: 760px) {
   /* vídeo do celular é quadrado e nativo: área mais alta e escurecimento só no fim, para o vídeo aparecer */
@@ -71,7 +75,7 @@ img { height: auto; }
 .fcd-rail.is-rail .fcd-rail__clip { margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter); overflow-x: clip; }
 .fcd-rail.is-rail .fcd-rail__bar { display: flex; }
 .fcd-rail.is-rail .fcd-rail__track { display: flex; width: max-content; will-change: transform; }
-.fcd-rail.is-rail .fcd-svc { flex: 0 0 clamp(360px, 30vw, 440px); }
+.fcd-rail.is-rail .fcd-svc { flex: 0 0 clamp(380px, 33vw, 480px); } /* largura em que os itens da lista não quebram linha */
 /* título fixo junto com os cartões: cabeçalho compacto para o conjunto caber na tela */
 .fcd-railpin.is-pinhead { background: var(--bg); }
 .fcd-railpin.is-pinhead .fcd-head { margin-bottom: 20px; gap: 12px 48px; }

@@ -393,6 +393,7 @@
     bookForm.addEventListener('change', (event) => {
       const { name, value } = event.target;
       if (name === 'vehicle' || name === 'addons') refresh();
+      if (name === 'pickup') setSum('where', event.target.checked ? 'Weekend pickup & delivery' : '42 Felton St, Waltham', '');
       if (name === 'window') { setSum('window', value, 'Pick a time'); updateHint(); }
     });
 
