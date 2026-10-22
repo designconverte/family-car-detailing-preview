@@ -421,6 +421,8 @@
     });
     try { sessionStorage.setItem(TRACK_KEY, JSON.stringify(origin)); } catch (error) { /* modo privado: segue sem */ }
   }
+  // altura do cabeçalho fixo; 76 px se ele ainda não existir (troca de página, carregamento parcial)
+  const headerHeight = () => { const header = $('.fcd-header'); return header ? header.offsetHeight : 76; };
   const metaContent = (name) => { const el = d.querySelector(`meta[name="${name}"]`); return el ? el.content.trim() : ''; };
 
   /* ---------- formulários: validar ao sair do campo, erro ao lado, envio honesto ---------- */
@@ -557,7 +559,7 @@
       const target = link.getAttribute('href').length > 1 ? $(link.getAttribute('href')) : null;
       if (!target) return;
       event.preventDefault();
-      lenis.scrollTo(target, { offset: -($('.fcd-header').offsetHeight + 16) });
+      lenis.scrollTo(target, { offset: -(headerHeight() + 16) });
       history.pushState(null, '', link.getAttribute('href'));
     });
   }
@@ -589,7 +591,7 @@
     // para o cartão caber inteiro → fica a grade empilhada.
     mm.add('(min-width: 961px), (max-width: 960px)', () => {
       rail.classList.add('is-rail');
-      const headerH = () => $('.fcd-header').offsetHeight + (window.innerWidth > 960 ? 20 : 12);
+      const headerH = () => headerHeight() + (window.innerWidth > 960 ? 20 : 12);
       // O que fixa, em ordem de preferência: título + cartões; se não couber na tela, só os cartões;
       // se nem isso couber, fica a grade empilhada. A barra fixa do celular sai de cena enquanto os
       // cartões correm (cada cartão já tem o seu "Book").
